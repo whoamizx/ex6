@@ -1,0 +1,7 @@
+procedure calculate(a, b);
+begin
+    read(x);
+    write(a + b);
+end;
+
+call calculate(5, 10);

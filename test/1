@@ -1,0 +1,36 @@
+123 abc + - * / = # < <= > >= := ( ) , ; .
+begin call const do end if odd procedure read then var while write
+abc123 123abc 456 var1 _underscore
+  a
+  b
+  c
+a @ b $ c
+x := 10;
+while x > 0 do
+begin
+  write x;
+  x := x - 1
+end.
+procedure gcd;
+var x, y;
+begin
+  read x;
+  read y;
+  while x # y do
+    if x > y then x := x - y
+    else y := y - x;
+  write x
+end.
+const max = 100;
+var i, sum;
+begin
+  sum := 0;
+  i := 1;
+  while i <= max do
+  begin
+    sum := sum + i;
+    i := i + 1
+  end;
+  write sum
+end.
+bb := 1.1

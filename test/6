@@ -1,0 +1,15 @@
+const pi = 3.14159;
+var radius, area;
+
+procedure calculate_area(r);
+begin
+    if r > 0 then
+        area := pi * r * r;
+        write(area);
+    else
+        write("Invalid radius");
+    end;
+end;
+
+radius := 5;
+call calculate_area(radius);
