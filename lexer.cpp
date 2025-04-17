@@ -62,6 +62,10 @@ Token Lexer::nextToken() {
       token = Token(NUMBER, input.substr(lastMatchPos, pos - lastMatchPos));
     }
     else if (isalpha(peek)) {
+      while (peek != '\0' && !isspace(peek)) 
+      {
+        advance();
+      }
       token = Token(UNKNOWN, input.substr(lastMatchPos, pos - lastMatchPos));
       return token;
     }
