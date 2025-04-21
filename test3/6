@@ -1,0 +1,4 @@
+begin
+  if odd x then
+    write(x)
+end

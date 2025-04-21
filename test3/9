@@ -1,0 +1,4 @@
+begin
+  call factorial;
+  write(result)
+end

@@ -2,7 +2,6 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
-#include<algorithm>
 
 #include "lexer.h"
 
@@ -21,25 +20,12 @@ void process_file(const fs::path& input_file, const fs::path& output_file) {
     std::cerr << "Failed to open input file: " << input_file << "\n";
     return;
   }
-  auto content = std::string(std::istreambuf_iterator(in), std::istreambuf_iterator<char>());
+  auto content = std::string(std::istreambuf_iterator<char>(in), std::istreambuf_iterator<char>());
 
   ToLowerString(content);
 
   Lexer lexer(content);
-  Token token = lexer.nextToken();
-  std::ostringstream buffer;
-
-  while (!(token.type == UNKNOWN && token.text == "EOF")) {
-    buffer << token;
-    token = lexer.nextToken();
-  }
-
-  std::ofstream out(output_file);
-  if (!out) {
-    std::cerr << "Failed to open output file: " << output_file << "\n";
-    return;
-  }
-  out << buffer.str();
+  lexer.CheckGrammar();
 }
 
 void process_directory(const fs::path& input_folder, const fs::path& output_folder) {
@@ -60,6 +46,6 @@ void process_directory(const fs::path& input_folder, const fs::path& output_fold
 }
 
 int main() {
-  process_directory("./test", "./test_out");
+  process_directory("../test3", "../test3_out");
   return 0;
 }

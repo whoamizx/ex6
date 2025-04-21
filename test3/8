@@ -1,0 +1,10 @@
+begin
+  read(x);
+  y := 1;
+  while x > 0 do
+  begin
+    y := y * x;
+    x := x - 1
+  end;
+  write(y)
+end

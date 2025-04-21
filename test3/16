@@ -1,0 +1,4 @@
+begin
+  if (x > 5) then
+    write(x)
+end

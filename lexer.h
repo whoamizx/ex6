@@ -2,6 +2,8 @@
 #define LEX_H
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
+#include <vector>
 
 enum TokenType {
   NUL,  // ' ', '\n', '\t', '\r', '\v', '\f'
@@ -91,5 +93,23 @@ class Lexer {
   [[nodiscard]] bool is_pos_symbol(char peek) const;
   [[nodiscard]] bool is_pos_double_symbol(char peek) const;
   Token nextToken();
+  void CheckGrammar();
+
+  void statement_list();
+
+  void statement();
+
+  void condition();
+
+ private:
+  Token currentToken;
+  void match(const std::unordered_set<TokenType> &expected);
+
+  bool pos_match(const std::unordered_set<TokenType> &expected);
+
+  void expression();
+  void term();
+  void factor();
+  void error(const std::string& message);
 };
 #endif

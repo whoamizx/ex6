@@ -1,0 +1,7 @@
+begin
+  if x < 10 then
+  begin
+    x := x + 1;
+    write(x)
+  end
+end
