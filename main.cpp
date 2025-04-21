@@ -4,17 +4,18 @@
 #include <sstream>
 
 #include "lexer.h"
+#include "Parser.h"
 
+class Parser;
 namespace fs = std::filesystem;
 
-void ToLowerString(std::string& input) {
-  for (char& c : input) 
-  {
+void ToLowerString(std::string &input) {
+  for (char &c : input) {
     c = std::tolower(static_cast<unsigned char>(c));
   }
 }
 
-void process_file(const fs::path& input_file, const fs::path& output_file) {
+void process_file(const fs::path &input_file, const fs::path &output_file) {
   std::ifstream in(input_file);
   if (!in) {
     std::cerr << "Failed to open input file: " << input_file << "\n";
@@ -25,19 +26,26 @@ void process_file(const fs::path& input_file, const fs::path& output_file) {
   ToLowerString(content);
 
   Lexer lexer(content);
-  lexer.CheckGrammar();
+  std::vector<Token> tokens;
+  auto token = lexer.nextToken();
+  while (!(token.type == UNKNOWN && token.text == "EOF")) {
+    tokens.push_back(token);
+    token=lexer.nextToken();
+  }
+  Parser parser(tokens);
+  parser.CheckGrammar();
 }
 
-void process_directory(const fs::path& input_folder, const fs::path& output_folder) {
+void process_directory(const fs::path &input_folder, const fs::path &output_folder) {
   if (!exists(output_folder)) {
     create_directory(output_folder);
   }
 
-  for (const auto& entry : fs::directory_iterator(input_folder)) {
+  for (const auto &entry : fs::directory_iterator(input_folder)) {
     if (!entry.is_regular_file()) {
       continue;
     }
-    const fs::path& input_file = entry.path();
+    const fs::path &input_file = entry.path();
     fs::path output_file = output_folder / (input_file.filename().string() + "_result.txt");
 
     process_file(input_file, output_file);
