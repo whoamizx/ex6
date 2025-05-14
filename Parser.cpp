@@ -9,7 +9,7 @@ void Parser::error(const std::string &message) {
 void Parser::CheckGrammar() {
   currentToken = nextToken();
   try {
-    statement();
+    expression();  //statement();  只处理单个表达式
     std::cout << "语法正确" << std::endl;
   } catch (const std::exception &e) {
     std::cout << e.what() << std::endl;
@@ -51,9 +51,6 @@ void Parser::statement() {
     match({RPAREN});
   } else if (pos_match({BEGINSYM})) {
     statement_list();
-    while (pos_match({SEMICOLON})) {
-      statement_list();
-    }
     match({ENDSYM});
   } else {
     error("无效的语句");
@@ -67,27 +64,44 @@ void Parser::statement_list() {
   }
 }
 
-void Parser::expression() {
-  term();
-  while (pos_match({PLUS, MINUS})) {
-    term();
+std::string Parser::expression() {
+  std::string result = term();
+  while (currentToken.type == PLUS || currentToken.type == MINUS) {
+    std::string op = currentToken.type == PLUS ? "+" : "-";
+    currentToken = nextToken();
+    std::string right = term();
+    std::string temp = quad_gen.new_temp();
+    quad_gen.add_quadruple(Quadruple(op, result, right, temp));
+    result = temp;
   }
+  return result;
 }
 
-void Parser::term() {
-  factor();
-  while (pos_match({TIMES, SLASH})) {
-    factor();
+std::string Parser::term() {
+  std::string result = factor();
+  while (currentToken.type == TIMES || currentToken.type == SLASH) {
+    std::string op = currentToken.type == TIMES ? "*" : "/";
+    currentToken = nextToken();
+    std::string right = factor();
+    std::string temp = quad_gen.new_temp();
+    quad_gen.add_quadruple(Quadruple(op, result, right, temp));
+    result = temp;
   }
+  return result;
 }
 
-void Parser::factor() {
-  if (pos_match({IDENT, NUMBER})) {
+std::string Parser::factor() {
+  if (currentToken.type == IDENT || currentToken.type == NUMBER) {
+    std::string result = currentToken.text;
+    currentToken = nextToken();
+    return result;
   } else if (pos_match({LPAREN})) {
-    expression();
+    std::string result = expression();
     match({RPAREN});
+    return result;
   } else {
     error("Unexpected token: " + TokenTypeNames[currentToken.type]+":"+currentToken.text);
+    return "";
   }
 }
 

@@ -32,8 +32,20 @@ void process_file(const fs::path &input_file, const fs::path &output_file) {
     tokens.push_back(token);
     token=lexer.nextToken();
   }
+  tokens.push_back(token);
+
   Parser parser(tokens);
   parser.CheckGrammar();
+
+  std::ofstream out(output_file);
+  if (!out) {
+    std::cerr << "Failed to open output file: " << output_file << "\n";
+    return;
+  }
+
+  for (const auto& quad : parser.get_quadruples()) {
+    out << "(" << quad.op << ", " << quad.arg1 << ", " << quad.arg2 << ", " << quad.result << ")\n";
+  }
 }
 
 void process_directory(const fs::path &input_folder, const fs::path &output_folder) {
@@ -54,6 +66,6 @@ void process_directory(const fs::path &input_folder, const fs::path &output_fold
 }
 
 int main() {
-  process_directory("../test3", "../test3_out");
+  process_directory("../test5", "../test5_out");
   return 0;
 }

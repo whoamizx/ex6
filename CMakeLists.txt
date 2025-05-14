@@ -3,4 +3,4 @@ project(lex)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(lex main.cpp lexer.cpp Parser.cpp)
+add_executable(lex main.cpp lexer.cpp Parser.cpp quadruple.cpp)
