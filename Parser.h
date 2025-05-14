@@ -5,11 +5,20 @@
 #include <vector>
 
 #include "lexer.h"
-#include "quadruple.h"
+
+struct Quadruple {
+    std::string op;
+    std::string arg1;
+    std::string arg2;
+    std::string result;
+    Quadruple(std::string op, std::string arg1, std::string arg2, std::string result)
+      : op(op), arg1(arg1), arg2(arg2), result(result) {}
+};
 
 struct ExprResult {
     std::string result;
     std::vector<Quadruple> quads;
+    int temp_count;  // 记录当前分支使用的临时变量数量
 };
 
 class Parser {
@@ -25,15 +34,14 @@ class Parser {
     Token nextToken();
     int pos{};
     Token currentToken{};
-    QuadrupleGenerator quad_gen;
     std::vector<Quadruple> quadruples;
 
     void match(const std::unordered_set<TokenType> &expected);
     bool pos_match(const std::unordered_set<TokenType> &expected);
 
-    ExprResult expression();
-    ExprResult term();
-    ExprResult factor();
+    ExprResult expression(int start_temp);
+    ExprResult term(int start_temp);
+    ExprResult factor(int start_temp);
     void error(const std::string &message);
     void statement_list();
     void statement();
