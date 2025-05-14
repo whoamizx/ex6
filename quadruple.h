@@ -2,7 +2,6 @@
 #define QUADRUPLE_H
 
 #include <string>
-#include <vector>
 
 struct Quadruple {
     std::string op;
@@ -18,12 +17,9 @@ class QuadrupleGenerator {
 public:
     QuadrupleGenerator();
     std::string new_temp();
-    void add_quadruple(const Quadruple& quad);
-    const std::vector<Quadruple>& get_quadruples() const;
     void clear();
 
 private:
-    std::vector<Quadruple> quadruples;
     int temp_counter;
 };
 
